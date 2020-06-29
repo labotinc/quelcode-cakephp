@@ -1,7 +1,3 @@
-# docker-mycakeapp2
-
-- 書籍 CakePHP 超入門 の docker 環境
-
 ## セットアップ手順
 
 1.  docker/php/Dockerfile の DOCKER_UID をホストと合わせる
