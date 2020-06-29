@@ -115,13 +115,3 @@
     index index.php index.html;
     ...
   ```
-
-## docker network 上での DB 接続情報
-
-- docker-compose.yml を参照
-  - DB ホスト: mysql
-  - mysql の port: 3306
-  - MYSQL_DATABASE: docker_db
-  - MYSQL_ROOT_PASSWORD: root
-  - MYSQL_USER: docker_db_user
-  - MYSQL_PASSWORD: docker_db_user_pass
