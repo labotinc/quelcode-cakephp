@@ -1,61 +1,77 @@
 # docker-mycakeapp2
 
-- CakePHP 超入門のオークションアプリの docker 環境
+- 書籍 CakePHP 超入門 の docker 環境
 
-## docker 起動前の準備
+## セットアップ手順
 
-- docker/php/Dockerfile の DOCKER_UID をホストと合わせる
+1.  docker/php/Dockerfile の DOCKER_UID をホストと合わせる
 
-  ```
-  # ホストのuidを調べる
-  id -u
+    1. どこでもよいのでコマンドラインで下記のコマンドを実行する
 
-  # docker/php/Dockerfile の ARG DOCKER_UID=1000 の右辺を↑で調べた値にする
-  vim docker/php/Dockerfile
-  ```
+       ```
+       id -u
+       ```
 
-  - Linux ではこれをやらないとゲスト側で作成したファイルをホスト側で編集できなくなる
-  - Mac ではこの手順は不要との説もある
-  - Windows の人は WSL (Windows Subsystem for Linux) を使おう
+    1. docker/php/Dockerfile の ARG DOCKER_UID=1000 の右辺を ↑ で調べた値にする
 
-## docker の起動方法
+    - Linux ではこれをやらないとゲスト側で作成したファイルをホスト側で編集できなくなる
+    - Mac ではこの手順は不要との説もある
+    - Windows の人は WSL (Windows Subsystem for Linux) を使おう
 
-- docker-compose.yml がある場所で下記のコマンドを実行する。初回起動には時間がかかる
-
-  ```
-  docker-compose up -d
-  ```
-
-## docker の終了方法
-
-- docker-compose.yml がある場所で下記のコマンドを実行する
-
-  ```
-  docker-compose down
-  ```
-
-## 起動中のコンテナの bash を実行する方法(重要)
-
-- php コンテナの場合
-
-  ```
-  docker-compose exec php bash
-  ```
-
-  - php コンテナの bash では composer コマンドや ./bin/cake ファイルが実行可能です！
-
-- msyql コンテナの場合
-
-  ```
-  docker-compose exec mysql bash
-  ```
-
-  - mysql コマンドラインの起動方法
+1.  docker-compose.yml がある場所で下記のコマンドを実行する。初回起動には時間がかかる
 
     ```
-    # mysql コンテナの bash で
-    mysql -u root -p # パスワードは"root"
+    docker-compose up -d
     ```
+
+    - 下記のようなメッセージが出たら起動成功
+
+      ```
+      Creating network "quelcode-cakephp_default" with the default driver
+      Creating quelcode-cakephp_phpmyadmin_1 ... done
+      Creating quelcode-cakephp_nginx_1      ... done
+      Creating quelcode-cakephp_mysql_1      ... done
+      Creating quelcode-cakephp_php_1        ... done
+      ```
+
+1.  起動中の php コンテナの bash を実行する
+
+    ```
+    docker-compose exec php bash
+    ```
+
+    - 下記のようなプロンプトに切り替わる
+
+      ```
+      docker@df8275e6f1f9:/var/www/html$
+      ```
+
+    - php コンテナの bash では composer コマンドや ./bin/cake ファイルが実行可能
+
+1.  php コンテナの bash で cakephp を install する
+
+    1. php コンテナの bash で /var/www/html/mycakeapp に移動する(php コンテナの bash プロンプトも記載する)
+
+       ```
+       docker@df8275e6f1f9:/var/www/html$ cd mycakeapp
+       docker@df8275e6f1f9:/var/www/html/mycakeapp$
+       ```
+
+    1. 下記のコマンドを実行して php コンテナに cakephp を install する
+
+       ```
+       docker@e6e656dc2f0d:/var/www/html/mycakeapp$ composer install
+       ```
+
+       - こちらも時間がかかる。質問プロンプトが出たら Y と回答する
+
+         ```
+         Set Folder Permissions ? (Default to Y) [Y,n]? Y
+         ```
+
+1.  cakephp アプリをブラウザで表示する
+    - ブラウザで http://localhost:10080 にアクセスする
+    - cakephp の赤いページが表示されたらセットアップ成功
 
 ## 起動中のコンテナの bash を終了する方法
 
@@ -65,28 +81,14 @@
   ctrl + p + q
   ```
 
-  - コンテナの bash で exit コマンドを打つとコンテナ自体が終了してしまう恐れがある
+  - コンテナの bash で exit コマンドを打つとコンテナ自体が終了してしまう恐れがあるので非推奨
 
-## php コンテナに cakephp をインストールする方法
+## migration を行う方法
 
-- php コンテナの bash で /var/www/html/mycakeapp に移動して
-
-  ```
-  composer install
-  ```
-
-  - 時間がかかる。質問プロンプトが出たら Y と回答する
-
-    ```
-    Set Folder Permissions ? (Default to Y) [Y,n]? Y
-    ```
-
-## migration
-
-- php コンテナの bash で /var/www/html/mycakeapp に移動して
+- php コンテナの bash で /var/www/html/mycakeapp に移動して下記のコマンドを実行する
 
   ```
-  ./bin/cake migrations migrate
+  docker@e6e656dc2f0d:/var/www/html/mycakeapp$ ./bin/cake migrations migrate
   ```
 
 ## ブラウザで テキストに記載されている url にアクセスする方法
