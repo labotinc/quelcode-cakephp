@@ -51,7 +51,7 @@
        docker@df8275e6f1f9:/var/www/html/mycakeapp$
        ```
 
-    1. 下記のコマンドを実行して php コンテナに cakephp を install する
+    1. 下記のコマンドを実行する
 
        ```
        docker@e6e656dc2f0d:/var/www/html/mycakeapp$ composer install
