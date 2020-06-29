@@ -1,6 +1,8 @@
 ## セットアップ手順
 
-1.  docker/php/Dockerfile の DOCKER_UID をホストと合わせる
+- このセットアップ手順により CakePHP 超入門 Chapter1 の環境構築作業を飛ばせる
+
+1.  ゲスト側(php コンテナ)のユーザ ID をホスト側と合わせる
 
     1. どこでもよいのでコマンドラインで下記のコマンドを実行する
 
@@ -8,14 +10,14 @@
        id -u
        ```
 
-    1. docker-compose.yml があるディレクトリで、下記コマンドの 1000 の値を ↑ で調べた値に書き換えて実行する
+    1. docker-compose.yml があるディレクトリで、下記のコマンドの 1000 の値を id -u で調べた値に書き換えて実行する
 
        ```
        # 1000の値は id -u で調べた値に書き換える
        echo DOCKER_UID=1000 > .env
        ```
 
-    - docker-compose.yml があるディレクトリがあるディレクトリに .env ファイルが作成されたら成功
+    - docker-compose.yml があるディレクトリに .env ファイルが作成されたら成功
 
       ```
       # .env は隠しファイルなので ls -a で視認できる
@@ -23,8 +25,8 @@
       .  ..  .env  .git  .gitignore  README.md  docker  docker-compose.yml  html
       ```
 
-    - Linux ではこれをやらないとゲスト側で作成したファイルをホスト側で編集できなくなる
-    - Mac はユーザ権限が独特なためこの手順は不要との説もある
+    - Linux ではユーザ ID が異なるとゲスト側で作成したファイルをホスト側で編集できなくなる
+    - Mac はユーザ権限が独特なためユーザ ID を一致させる必要はないとの説もある
     - Windows の人は WSL (Windows Subsystem for Linux) を使おう
 
 1.  docker-compose.yml があるディレクトリで下記のコマンドを実行する。初回起動には時間がかかる
