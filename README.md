@@ -20,7 +20,7 @@
     docker-compose up -d
     ```
 
-    - 下記のようなメッセージが出たら起動成功
+    - 下記のようなメッセージが出たら成功
 
       ```
       Creating network "quelcode-cakephp_default" with the default driver
@@ -36,13 +36,11 @@
     docker-compose exec php bash
     ```
 
-    - 下記のようなプロンプトに切り替わる
+    - 下記のようなプロンプトに切り替われば成功
 
       ```
       docker@df8275e6f1f9:/var/www/html$
       ```
-
-    - php コンテナの bash では composer コマンドや ./bin/cake ファイルが実行可能
 
 1.  php コンテナの bash で cakephp を install する
 
