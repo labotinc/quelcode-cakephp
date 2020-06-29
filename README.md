@@ -85,22 +85,24 @@
   docker@e6e656dc2f0d:/var/www/html/mycakeapp$ ./bin/cake migrations migrate
   ```
 
+  - 同様に bake 等も実行可能
+
 ## ブラウザで テキストに記載されている url にアクセスする方法
 
 - 下記のように読みかえてアクセスする。nginx コンテナ の port とドキュメントルートを設定しているため
   - http://localhost/mycakeapp/hello.html ⇒ http://localhost:10080/hello.html
   - http://localhost/mycakeapp/auction/add ⇒ http://localhost:10080/auction/add
 
-## ブラウザで phpMyAdmin を表示する方法
-
-- http://localhost:10081 にアクセスする
-  - root 権限で操作可能
-
 ## ブラウザで オークションアプリを表示する方法(課題用のブランチにおいて)
 
 - http://localhost:10080/auction にアクセスする
   - http://localhost:10080/users/add からユーザを作成できる
   - サンプルコードが入っている課題用のブランチでないとアクセスできません
+
+## ブラウザで phpMyAdmin を表示する方法
+
+- http://localhost:10081 にアクセスする
+  - root 権限で操作可能
 
 ## nginx のドキュメントルートを変更する方法
 
