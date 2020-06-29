@@ -44,7 +44,7 @@
 
 1.  php コンテナの bash で cakephp を install する
 
-    1. php コンテナの bash で /var/www/html/mycakeapp に移動する(php コンテナの bash プロンプトも記載する)
+    1. php コンテナの bash で /var/www/html/mycakeapp に移動する
 
        ```
        docker@df8275e6f1f9:/var/www/html$ cd mycakeapp
