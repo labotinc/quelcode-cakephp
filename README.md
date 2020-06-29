@@ -97,7 +97,7 @@
 
 - http://localhost:10080/auction にアクセスする
   - http://localhost:10080/users/add からユーザを作成できる
-  - サンプルコードが入っている課題用のブランチでないとアクセスできません
+  - clone 直後の master ブランチには存在しない。課題用のブランチにおいて migration を行う必要がある
 
 ## ブラウザで phpMyAdmin を表示する方法
 
