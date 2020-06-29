@@ -8,13 +8,26 @@
        id -u
        ```
 
-    1. docker/php/Dockerfile の ARG DOCKER_UID=1000 の右辺を ↑ で調べた値にする
+    1. docker-compose.yml があるディレクトリで、下記コマンドの 1000 の値を ↑ で調べた値に書き換えて実行する
+
+       ```
+       # 1000の値は id -u で調べた値に書き換える
+       echo DOCKER_UID=1000 > .env
+       ```
+
+    - docker-compose.yml があるディレクトリがあるディレクトリに .env ファイルが作成されたら成功
+
+      ```
+      # .env は隠しファイルなので ls -a で視認できる
+      ls -a
+      .  ..  .env  .git  .gitignore  README.md  docker  docker-compose.yml  html
+      ```
 
     - Linux ではこれをやらないとゲスト側で作成したファイルをホスト側で編集できなくなる
-    - Mac ではこの手順は不要との説もある
+    - Mac はユーザ権限が独特なためこの手順は不要との説もある
     - Windows の人は WSL (Windows Subsystem for Linux) を使おう
 
-1.  docker-compose.yml がある場所で下記のコマンドを実行する。初回起動には時間がかかる
+1.  docker-compose.yml があるディレクトリで下記のコマンドを実行する。初回起動には時間がかかる
 
     ```
     docker-compose up -d
