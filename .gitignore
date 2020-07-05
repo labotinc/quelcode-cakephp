@@ -1,3 +1,4 @@
 docker/mysql/data
 phpmyadmin
 .env
+.vscode
