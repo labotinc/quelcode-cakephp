@@ -1,5 +1,6 @@
 FROM php:7.3-fpm
 
+ARG DOCKER_UID=${DOCKER_UID}
 ARG DOCKER_USER=docker
 ARG DOCKER_PASSWORD=docker
 
@@ -19,8 +20,9 @@ RUN apt-get update \
   && docker-php-ext-install pdo_mysql intl mbstring
 
 # ユーザ作成
-RUN useradd -m --uid ${DOCKER_UID} --groups sudo ${DOCKER_USER} \
-  && echo ${DOCKER_USER}:${DOCKER_PASSWORD} | chpasswd
+RUN useradd -m ${DOCKER_USER} -u ${DOCKER_UID}
+RUN echo "${DOCKER_USER}:${DOCKER_PASSWORD}" | chpasswd
+RUN usermod -aG sudo ${DOCKER_USER}
 
 # 作成したユーザーに切り替える
 USER ${DOCKER_USER}
