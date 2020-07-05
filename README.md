@@ -1,61 +1,87 @@
-# docker-mycakeapp2
+## セットアップ手順
 
-- CakePHP 超入門のオークションアプリの docker 環境
+1. このリポジトリの master ブランチをチェックアウトする
 
-## docker 起動前の準備
+1. php コンテナのユーザ ID をホスト側と合わせるためのファイル .env を作成する
 
-- docker/php/Dockerfile の DOCKER_UID をホストと合わせる
+   1. どこでもよいのでコマンドラインで下記のコマンドを実行する
 
-  ```
-  # ホストのuidを調べる
-  id -u
+      ```
+      id -u
+      ```
 
-  # docker/php/Dockerfile の ARG DOCKER_UID=1000 の右辺を↑で調べた値にする
-  vim docker/php/Dockerfile
-  ```
+   1. docker-compose.yml があるディレクトリで、下記のコマンドの 1000 の値を id -u で調べた値に書き換えて実行する
 
-  - Linux ではこれをやらないとゲスト側で作成したファイルをホスト側で編集できなくなる
-  - Mac ではこの手順は不要との説もある
-  - Windows の人は WSL (Windows Subsystem for Linux) を使おう
+      ```
+      # 1000 の値を id -u で調べた値に書き換えて実行する
+      echo DOCKER_UID=1000 > .env
+      ```
 
-## docker の起動方法
+   - docker-compose.yml があるディレクトリに .env ファイルが作成されたら成功
 
-- docker-compose.yml がある場所で下記のコマンドを実行する。初回起動には時間がかかる
+     ```
+     # .env は隠しファイルなので ls -a で視認できる
+     ls -a
+     .  ..  .env  .git  .gitignore  README.md  docker  docker-compose.yml  html
+     ```
 
-  ```
-  docker-compose up -d
-  ```
+   - Linux ではユーザ ID が異なるとコンテナで作成したファイルをホスト側で編集できなくなる
+   - Mac はユーザ権限が独特なためユーザ ID を一致させる必要はないとの説もある
+   - Windows の人は WSL (Windows Subsystem for Linux) を使おう
 
-## docker の終了方法
+1. docker-compose.yml があるディレクトリで下記のコマンドを実行する。初回起動には時間がかかる
 
-- docker-compose.yml がある場所で下記のコマンドを実行する
+   ```
+   docker-compose up -d
+   ```
 
-  ```
-  docker-compose down
-  ```
+   - 下記のようなメッセージが出たら成功
 
-## 起動中のコンテナの bash を実行する方法(重要)
+     ```
+     Creating network "quelcode-cakephp_default" with the default driver
+     Creating quelcode-cakephp_phpmyadmin_1 ... done
+     Creating quelcode-cakephp_nginx_1      ... done
+     Creating quelcode-cakephp_mysql_1      ... done
+     Creating quelcode-cakephp_php_1        ... done
+     ```
 
-- php コンテナの場合
+1. 起動中の php コンテナの bash を実行する
 
-  ```
-  docker-compose exec php bash
-  ```
+   ```
+   docker-compose exec php bash
+   ```
 
-  - php コンテナの bash では composer コマンドや ./bin/cake ファイルが実行可能です！
+   - 下記のようなプロンプトに切り替われば成功
 
-- msyql コンテナの場合
+     ```
+     docker@df8275e6f1f9:/var/www/html$
+     ```
 
-  ```
-  docker-compose exec mysql bash
-  ```
+1. php コンテナの bash で cakephp を install する
 
-  - mysql コマンドラインの起動方法
+   1. php コンテナの bash で /var/www/html/mycakeapp に移動する
 
-    ```
-    # mysql コンテナの bash で
-    mysql -u root -p # パスワードは"root"
-    ```
+      ```
+      docker@df8275e6f1f9:/var/www/html$ cd mycakeapp
+      docker@df8275e6f1f9:/var/www/html/mycakeapp$
+      ```
+
+   1. composer install を実行する
+
+      ```
+      docker@e6e656dc2f0d:/var/www/html/mycakeapp$ composer install
+      ```
+
+      - こちらも時間がかかる。質問プロンプトが出たら Y と回答する
+
+        ```
+        Set Folder Permissions ? (Default to Y) [Y,n]? Y
+        ```
+
+1. cakephp アプリをブラウザで表示する
+   - ブラウザで http://localhost:10080 にアクセスする
+   - cakephp の赤いページが表示されたらセットアップ成功
+   - このセットアップ手順により CakePHP 超入門 Chapter1 の環境構築作業を飛ばせる
 
 ## 起動中のコンテナの bash を終了する方法
 
@@ -65,50 +91,38 @@
   ctrl + p + q
   ```
 
-  - コンテナの bash で exit コマンドを打つとコンテナ自体が終了してしまう恐れがある
+  - コンテナの bash で exit コマンドを打つとコンテナ自体が終了してしまう恐れがあるので非推奨
 
-## php コンテナに cakephp をインストールする方法
+## migration を行う方法
 
-- php コンテナの bash で /var/www/html/mycakeapp に移動して
-
-  ```
-  composer install
-  ```
-
-  - 時間がかかる。質問プロンプトが出たら Y と回答する
-
-    ```
-    Set Folder Permissions ? (Default to Y) [Y,n]? Y
-    ```
-
-## migration
-
-- php コンテナの bash で /var/www/html/mycakeapp に移動して
+- php コンテナの bash で /var/www/html/mycakeapp に移動して下記のコマンドを実行する
 
   ```
-  ./bin/cake migrations migrate
+  docker@e6e656dc2f0d:/var/www/html/mycakeapp$ ./bin/cake migrations migrate
   ```
+
+  - 同様に bake 等も実行可能
 
 ## ブラウザで テキストに記載されている url にアクセスする方法
 
-- 下記のように読みかえてアクセスする。nginx コンテナ の port とドキュメントルートを設定しているため
+- 下記のように port を指定し、mycakeapp を省略してアクセスする
   - http://localhost/mycakeapp/hello.html ⇒ http://localhost:10080/hello.html
   - http://localhost/mycakeapp/auction/add ⇒ http://localhost:10080/auction/add
+
+## ブラウザで オークションアプリを表示する方法(課題用のブランチにおいて)
+
+- http://localhost:10080/auction にアクセスする
+  - http://localhost:10080/users/add からユーザを作成できる
+  - clone 直後の master ブランチには存在しない。課題用のブランチにおいて migration を行う必要がある
 
 ## ブラウザで phpMyAdmin を表示する方法
 
 - http://localhost:10081 にアクセスする
   - root 権限で操作可能
 
-## ブラウザで オークションアプリを表示する方法(課題用のブランチにおいて)
-
-- http://localhost:10080/auction にアクセスする
-  - http://localhost:10080/users/add からユーザを作成できる
-  - サンプルコードが入っている課題用のブランチでないとアクセスできません
-
 ## nginx のドキュメントルートを変更する方法
 
-- docker/nginx/default.conf を編集することで nginx のドキュメントルートを変更可能
+- docker/nginx/default.conf を例えば下記のように編集すると、mylaravelapp のウェブルートディレクトリを nginx のドキュメントルートに設定できる
 
   ```diff
   server {
@@ -117,13 +131,3 @@
     index index.php index.html;
     ...
   ```
-
-## docker network 上での DB 接続情報
-
-- docker-compose.yml を参照
-  - DB ホスト: mysql
-  - mysql の port: 3306
-  - MYSQL_DATABASE: docker_db
-  - MYSQL_ROOT_PASSWORD: root
-  - MYSQL_USER: docker_db_user
-  - MYSQL_PASSWORD: docker_db_user_pass
