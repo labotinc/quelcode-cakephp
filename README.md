@@ -105,7 +105,7 @@
 
 ## ブラウザで テキストに記載されている url にアクセスする方法
 
-- 下記のように port を指定してアクセスする
+- 下記のように port を指定し、mycakeapp を省略してアクセスする
   - http://localhost/mycakeapp/hello.html ⇒ http://localhost:10080/hello.html
   - http://localhost/mycakeapp/auction/add ⇒ http://localhost:10080/auction/add
 
