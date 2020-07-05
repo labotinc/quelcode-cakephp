@@ -106,14 +106,14 @@
 
 ## ブラウザで テキストに記載されている url にアクセスする方法
 
-- 下記のように読みかえてアクセスする。nginx コンテナ の port とドキュメントルートを設定しているため
-  - http://localhost/mycakeapp/hello.html ⇒ http://localhost:10080/hello.html
-  - http://localhost/mycakeapp/auction/add ⇒ http://localhost:10080/auction/add
+- 下記のように port を指定してアクセスする
+  - http://localhost/mycakeapp/hello.html ⇒ http://localhost:10080/mycakeapp/hello.html
+  - http://localhost/mycakeapp/auction/add ⇒ http://localhost:10080/mycakeapp/auction/add
 
 ## ブラウザで オークションアプリを表示する方法(課題用のブランチにおいて)
 
-- http://localhost:10080/auction にアクセスする
-  - http://localhost:10080/users/add からユーザを作成できる
+- http://localhost:10080/mycakeapp/auction にアクセスする
+  - http://localhost:10080/mycakeapp/users/add からユーザを作成できる
   - clone 直後の master ブランチには存在しない。課題用のブランチにおいて migration を行う必要がある
 
 ## ブラウザで phpMyAdmin を表示する方法
@@ -123,12 +123,12 @@
 
 ## nginx のドキュメントルートを変更する方法
 
-- docker/nginx/default.conf を編集することで nginx のドキュメントルートを変更可能
+- docker/nginx/default.conf を下記のように編集すると、url から mycakeapp というパスを省略してアクセスできるようになる
 
   ```diff
   server {
-  - root  /var/www/html/mycakeapp/webroot;
-  + root  /var/www/html/mylaravelapp/public;
+  - root  /var/www/html;
+  + root  /var/www/html/mycakeapp/webroot;
     index index.php index.html;
     ...
   ```
