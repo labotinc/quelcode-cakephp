@@ -1,4 +1,5 @@
 <?php
+
 use Migrations\AbstractMigration;
 
 class CreateBiditems extends AbstractMigration
@@ -27,6 +28,19 @@ class CreateBiditems extends AbstractMigration
             'default' => null,
             'null' => false,
         ]);
+
+        $table->addColumn('information', 'vachar', [
+            'default' => null,
+            'limit' => 1000,
+            'null' => false,
+        ]);
+
+        $table->addColumn('image_path', 'vachar', [
+            'default' => null,
+            'limit' => 1000,
+            'null' => false,
+        ]);
+
         $table->addColumn('endtime', 'datetime', [
             'default' => null,
             'null' => false,
