@@ -8,6 +8,7 @@
 	echo $this->Form->control('name');
 	echo $this->Form->hidden('finished', ['value' => 0]);
 	echo $this->Form->control('information');
+	echo $this->Form->file('image_path');
 	echo $this->Form->control('endtime');
 	?>
 </fieldset>
