@@ -20,21 +20,6 @@
 		<th scope="row">終了時間</th>
 		<td><?= h($biditem->endtime) ?></td>
 	</tr>
-
-	<tr>
-		<td><?= print(substr($biditem['image_path'], -3)) ?></td>
-	</tr>
-
-
-	<tr>
-		<td><?= print($biditem['image_path']) ?></td>
-	</tr>
-
-
-
-
-
-
 	<tr>
 		<th scope="row">投稿時間</th>
 		<td><?= h($biditem->created) ?></td>
