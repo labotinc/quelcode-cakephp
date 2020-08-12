@@ -17,6 +17,10 @@
 		<td><?= h($biditem->information) ?></td>
 	</tr>
 	<tr>
+		<th scope="row">商品画像</th>
+		<td><img src="<?= $this->request->webroot ?>img/auction/<?= $biditem->image_path ?>" height="300" width="300" /></td>
+	</tr>
+	<tr>
 		<th scope="row">終了時間</th>
 		<td><?= h($biditem->endtime) ?></td>
 	</tr>
