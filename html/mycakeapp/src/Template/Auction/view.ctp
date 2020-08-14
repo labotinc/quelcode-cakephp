@@ -25,7 +25,21 @@
 		<td><?= h($biditem->endtime) ?></td>
 	</tr>
 	<tr>
-		<th scope="row">投稿時間</th>
+		<th scope="row">残り時間</th>
+		<td id='result' style="font-weight:bold;color:red;">
+			<?php
+			$endtime = get_object_vars($biditem->endtime);
+			$hensuPHP = date("Y/m/d H:i:s");
+			?>
+			<script>
+				var hensuJS = '<?php echo $hensuPHP; ?>';
+				var endtime_JS = '<?php echo ($endtime['date']); ?>';
+			</script>
+			<?= $this->Html->script('auction') ?>
+		</td>
+	</tr>
+	<tr>
+		<th scope=" row">投稿時間</th>
 		<td><?= h($biditem->created) ?></td>
 	</tr>
 	<tr>
