@@ -28,25 +28,13 @@ class AuctionController extends AuctionBaseController
 		$this->viewBuilder()->setLayout('auction');
 	}
 
-	// トップページ
-	public function index()
+	private function CheckFinished($id = null)
 	{
-		// ページネーションでBiditemsを取得
-		$auction = $this->paginate('Biditems', [
-			'order' =>['endtime'=>'desc'], 
-			'limit' => 10]);
-		$this->set(compact('auction'));
-	}
-
-	// 商品情報の表示
-	public function view($id = null)
-	{
-		// $idのBiditemを取得
-		$biditem = $this->Biditems->get($id, [
+		$biditem = $this->Biditems->get($id,[
 			'contain' => ['Users', 'Bidinfo', 'Bidinfo.Users']
-		]);
-		// オークション終了時の処理
-		if ($biditem->endtime < new \DateTime('now') and $biditem->finished == 0) {
+			]);
+			
+		if($biditem->endtime < new \DateTime('now') and $biditem->finished == 0){
 			// finishedを1に変更して保存
 			$biditem->finished = 1;
 			$this->Biditems->save($biditem);
@@ -68,8 +56,32 @@ class AuctionController extends AuctionBaseController
 				$this->Bidinfo->save($bidinfo);
 			}
 			// Biditemのbidinfoに$bidinfoを設定
-			$biditem->bidinfo = $bidinfo;		
+			$biditem->bidinfo = $bidinfo;
+		}else{
+			$bidrequest = null;
 		}
+		return [$biditem, $bidrequest];
+	}
+
+	// トップページ
+	public function index()
+	{
+		// ページネーションでBiditemsを取得
+		$auction = $this->paginate('Biditems', [
+			'order' =>['endtime'=>'desc'], 
+			'limit' => 10]);
+			
+		foreach($auction as $checkBidItem){
+			$id = $checkBidItem->id;
+			$this->CheckFinished($id);
+		}
+		$this->set(compact('auction'));
+	}
+
+	// 商品情報の表示
+	public function view($id = null)
+	{
+		list($biditem, $bidrequest) = $this->CheckFinished($id);
 		// Bidrequestsからbiditem_idが$idのものを取得
 		$bidrequests = $this->Bidrequests->find('all', [
 			'conditions'=>['biditem_id'=>$id], 
@@ -78,7 +90,7 @@ class AuctionController extends AuctionBaseController
 		// オブジェクト類をテンプレート用に設定
 		$this->set(compact('biditem', 'bidrequests'));
 	}
-
+	
 	// 出品する処理
 	public function add()
 	{
