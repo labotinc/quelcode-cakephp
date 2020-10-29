@@ -27,7 +27,7 @@
 </table>
 <div class="related">
 	<h4><?= __('落札情報') ?></h4>
-	<?php if (!empty($biditem->bidinfo)): ?>
+	<?php if (!empty($biditem->bidinfo) && !empty($bidrequest)): ?>
 	<table cellpadding="0" cellspacing="0">
 	<tr>
 		<th scope="col">落札者</th>
